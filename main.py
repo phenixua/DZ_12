@@ -122,17 +122,26 @@ class AddressBook(UserDict):
             book.data = data
             return book
 
-    # Пошук за запитом
+    # Пошук за запитом у записах книги контактів
     def search(self, query):
-        results = []
-        for record in self.values():
-            if (
-                query in record.name.value or
-                any(query in phone.value for phone in record.phones) or
-                any(query in email for email in record.emails)
-            ):
+        results = []  # Список для зберігання знайдених записів
+        for record in self.values():  # Перебір усіх записів у книзі
+            # Перевірка, чи співпадає запит з ім'ям контакту
+            if query in record.name.value:
                 results.append(record)
-        return results
+
+            # Перевірка, чи співпадає запит з хоча б одним номером телефону
+            for phone in record.phones:
+                if query in phone.value:
+                    results.append(record)
+
+            # Перевірка, чи співпадає запит з хоча б однією електронною поштою
+            for email in record.emails:
+                if query in email:
+                    results.append(record)
+
+        return results  # Повертаємо список знайдених записів
+
 
 if __name__ == "__main__":
     name = Name('Bill')
