@@ -113,14 +113,25 @@ class AddressBook(UserDict):
         with open(filename, 'wb') as file:
             pickle.dump(self.data, file)
 
-    # Завантаження адресної книги з диска
+    # # Завантаження адресної книги з диска
+    # @classmethod
+    # def load_from_file(cls, filename):
+    #     with open(filename, 'rb') as file:
+    #         data = pickle.load(file)
+    #         book = cls()
+    #         book.data = data
+    #         return book
+
     @classmethod
     def load_from_file(cls, filename):
-        with open(filename, 'rb') as file:
-            data = pickle.load(file)
-            book = cls()
-            book.data = data
-            return book
+        try:
+            with open(filename, 'rb') as file:
+                data = pickle.load(file)
+                book = cls()
+                book.data = data
+                return book
+        except FileNotFoundError:
+            return cls()  # Повертаємо новий об'єкт AddressBook
 
     # Пошук за запитом у записах книги контактів
     def search(self, query):
